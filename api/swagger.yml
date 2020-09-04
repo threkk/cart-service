@@ -1,0 +1,452 @@
+openapi: 3.0.2
+info:
+  title: Cart service
+  description: >-
+    Refactoring of part of a monolith into a cart service.
+  contact:
+    email: hello@threkk.com
+  version: 1.0.0
+
+paths:
+  /cart:
+    post:
+      summary: Creates a new cart for the user.
+      description: Creates a new cart for the user.
+      security:
+        - basicAuth: []
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+              example:
+                  id: 1
+                  created_at: "2020-01-01"
+                  updated_at: "2020-01-01"
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                  status: 403
+                  error: Forbidden
+                  description: Forbidden
+
+    get:
+      summary: Returns the current state of the cart.
+      description: Returns the current state of the cart.
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+              example:
+                  id: 1
+                  created_at: "2020-01-01"
+                  updated_at: "2020-01-01"
+                  items:
+                    - id: 5
+                      created_at: "2020-01-01"
+                      updated_at: "2020-01-02"
+                      product_id: 10
+                      quatity: 2
+                      price: 6.0
+                    - id: 6
+                      created_at: "2020-01-01"
+                      updated_at: "2020-01-02"
+                      product_id: 20
+                      quatity: 5
+                      price: 12.5
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                  status: 404
+                  error: Not found
+                  description: Not found
+
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                  status: 403
+                  error: Forbidden
+                  description: Forbidden
+
+  /cart/{cartId}/item/:
+    post:
+      description: Adds an item to the cart.
+      security:
+        - basicAuth: []
+      parameters:
+        - name: cartId
+          in: path
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemInput'
+            example:
+                product_id: 10
+                quatity: 2
+                price: 6.0
+
+      responses:
+        '201':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+              example:
+                  id: 5
+                  created_at: "2020-01-01"
+                  updated_at: "2020-01-02"
+                  product_id: 10
+                  quatity: 2
+                  price: 6.0
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                  status: 404
+                  error: Not found
+                  description: Not found
+
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                  status: 403
+                  error: Forbidden
+                  description: Forbidden
+    delete:
+      description: Deletes all the items of the cart.
+      security:
+        - basicAuth: []
+      parameters:
+        - name: cartId
+          in: path
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: List of items deleted.
+                properties:
+                  items:
+                    description: Items deleted
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Item'
+              example:
+                  items:
+                    - id: 5
+                      created_at: "2020-01-01"
+                      updated_at: "2020-01-02"
+                      product_id: 10
+                      quatity: 2
+                      price: 6.0
+                    - id: 6
+                      created_at: "2020-01-01"
+                      updated_at: "2020-01-02"
+                      product_id: 20
+                      quatity: 5
+                      price: 12.5
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                  status: 404
+                  error: Not found
+                  description: Not found
+
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                  status: 403
+                  error: Forbidden
+                  description: Forbidden
+
+  /cart/{cartId}/item/{itemId}:
+    put:
+      description: Updates an item to the cart.
+      security:
+        - basicAuth: []
+      parameters:
+        - name: cartId
+          in: path
+          schema:
+            type: integer
+          required: true
+        - name: itemId
+          in: path
+          schema:
+            type: integer
+          required: true
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/ItemInput'
+                - type: object
+                  required:
+                    - id
+                  properties:
+                    id:
+                      description: ID of the item.
+                      type: integer
+                      nullable: false
+            example:
+                id: 5
+                product_id: 10
+                quatity: 2
+                price: 6.0
+
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+              example:
+                  id: 5
+                  created_at: "2020-01-01"
+                  updated_at: "2020-01-02"
+                  product_id: 10
+                  quatity: 2
+                  price: 6.0
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                  status: 404
+                  error: Not found
+                  description: Not found
+
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                  status: 422
+                  error: Unprocessable entity
+                  description: Unprocessable entity
+
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                  status: 403
+                  error: Forbidden
+                  description: Forbidden
+    delete:
+      description: Removes the item from the cart.
+      security:
+        - basicAuth: []
+      parameters:
+        - name: cartId
+          in: path
+          schema:
+            type: integer
+          required: true
+        - name: itemId
+          in: path
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+              example:
+                    id: 5
+                    created_at: "2020-01-01"
+                    updated_at: "2020-01-02"
+                    product_id: 10
+                    quatity: 2
+                    price: 6.0
+
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                  status: 404
+                  error: Not found
+                  description: Not found
+
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                  status: 403
+                  error: Forbidden
+                  description: Forbidden
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+    Error:
+      description: Standard error message.
+      type: object
+      required:
+        - code
+        - error
+        - description
+      properties:
+        status:
+          description: Status code of the error.
+          nullable: false
+          type: integer
+        error:
+          description: Error name
+          nullable: false
+          type: string
+        description:
+          description: Description of the error.
+          nullable: false
+          type: string
+
+    Cart:
+      description: Holds items that the user intends to purchase.
+      type: object
+      required:
+        - id
+        - created_at
+        - updated_at
+      properties:
+        id:
+          description: ID of the cart
+          type: integer
+          nullable: false
+        user_id:
+          description: ID of the user who it belongs.
+          type: integer
+        created_at:
+          description: Creation date of the cart.
+          type: string
+          format: datetime
+          nullable: false
+        updated_at:
+          description: Last update of the cart.
+          type: string
+          format: datetime
+          nullable: false
+        items:
+          description: Items added in the cart at the moment.
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+    Item:
+      description: Item stored in the cart.
+      type: object
+      required:
+        - id
+        - created_at
+        - updated_at
+      properties:
+        id:
+          description: ID of the item.
+          type: integer
+          nullable: false
+        cart_id:
+          description: ID of the cart associated.
+          type: integer
+          nullable: false
+        product_id:
+          description: ID of the product
+          type: integer
+        quantity:
+          description: Amount of items.
+          type: integer
+          default: 1
+        price:
+          description: Aggregated cost of the items.
+          type: number
+        created_at:
+          description: Creation date of the cart.
+          type: string
+          format: datetime
+          nullable: false
+        updated_at:
+          description: Last update of the cart.
+          type: string
+          format: datetime
+          nullable: false
+
+    ItemInput:
+      description: Item to store in the cart.
+      type: object
+      properties:
+        product_id:
+          description: ID of the product
+          type: integer
+        quantity:
+          description: Amount of items.
+          type: integer
+          default: 1
+          minimum: 1
+        price:
+          description: Aggregated cost of the items.
+          type: number

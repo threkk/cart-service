@@ -1,0 +1,39 @@
+
+@startuml Cart_Service_Design
+
+!include ./C4-PlantUML/C4_Container.puml
+
+Container(products, "Product service", "Manages the product of the platform" )
+Container(user, "User service", "Stores the information about the users of the platform")
+Container(order, "Order service", "Manages the orders to the platform")
+Container(cart, "Cart service", "Handles the list of products for an order in the platform")
+
+Rel(cart, products, "is filled with")
+Rel(cart, user, "belongs to")
+Rel(user, order, "makes an")
+Rel(order, cart, "refers to")
+
+@enduml
+
+@startuml Cart_Service_Container
+
+!include ./C4-PlantUML/C4_Container.puml
+!include ./C4-PlantUML/C4_Component.puml
+
+Container(products, "Product service", "Manages the product of the platform" )
+Container(user, "User service", "Stores the information about the users of the platform")
+Container(order, "Order service", "Manages the orders to the platform")
+
+Container_Boundary(cart, "Cart service") {
+	Component(cartController, "Carts controller", "Manages the creation of a cart")
+	Component(itemController, "Items controller", "Manages the items in a cart")
+	ComponentDb(cartDb, "Cart database", "Contains the tables 'carts' and 'line_items'")
+}
+
+Rel(cart, products, "is filled with")
+Rel(cart, user, "belongs to")
+Rel(user, order, "makes an")
+Rel(order, cart, "refers to")
+
+
+@enduml

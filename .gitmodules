@@ -1,0 +1,3 @@
+[submodule "docs/architecture/C4-PlantUML"]
+	path = docs/architecture/C4-PlantUML
+	url = git@github.com:RicardoNiepel/C4-PlantUML.git
