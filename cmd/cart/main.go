@@ -15,25 +15,6 @@ import (
 )
 
 func main() {
-	// p := flag.String("database", "", "Path to the SQLite database.")
-	// flag.Parse()
-
-	// if *p == "" {
-	// 	fmt.Println("No database provided.")
-	// 	os.Exit(1)
-	// }
-
-	// wd, err := os.Getwd()
-	// if err != nil {
-	// 	fmt.Println("error: " + err.Error())
-	// 	os.Exit(1)
-	// }
-
-	// loc, err := filepath.Abs(path.Join(wd, *p))
-	// if err != nil {
-	// 	fmt.Println("error: " + err.Error())
-	// 	os.Exit(1)
-	// }
 
 	svc := cart.NewService()
 	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{})
