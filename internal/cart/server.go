@@ -3,6 +3,7 @@ package cart
 import (
 	"net/http"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
 )
@@ -42,7 +43,7 @@ func NewService() *Service {
 
 	s.router.Use(loggingMiddleware)
 	s.router.Use(jsonMiddleware)
-	// s.router.Use(handlers.RecoveryHandler())
+	s.router.Use(handlers.RecoveryHandler())
 	s.router.Use(corsMiddleware)
 	s.router.Use(mux.CORSMethodMiddleware(s.router))
 	s.router.Use(authMiddleware)
