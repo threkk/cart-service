@@ -25,16 +25,16 @@ paths:
                   id: 1
                   created_at: "2020-01-01"
                   updated_at: "2020-01-01"
-        '403':
-          description: Forbidden
+        '401':
+          description: Unathorised
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                  status: 403
-                  error: Forbidden
-                  description: Forbidden
+                  status: 401
+                  error: Unathorised
+                  description: Unathorised
 
     get:
       summary: Returns the current state of the cart.
@@ -76,16 +76,16 @@ paths:
                   error: Not found
                   description: Not found
 
-        '403':
-          description: Forbidden
+        '401':
+          description: Unathorised
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                  status: 403
-                  error: Forbidden
-                  description: Forbidden
+                  status: 401
+                  error: Unathorised
+                  description: Unathorised
 
   /cart/{cartId}/item/:
     post:
@@ -134,16 +134,16 @@ paths:
                   error: Not found
                   description: Not found
 
-        '403':
-          description: Forbidden
+        '401':
+          description: Unathorised
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                  status: 403
-                  error: Forbidden
-                  description: Forbidden
+                  status: 401
+                  error: Unathorised
+                  description: Unathorised
     delete:
       description: Deletes all the items of the cart.
       security:
@@ -193,16 +193,16 @@ paths:
                   error: Not found
                   description: Not found
 
-        '403':
-          description: Forbidden
+        '401':
+          description: Unathorised
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                  status: 403
-                  error: Forbidden
-                  description: Forbidden
+                  status: 401
+                  error: Unathorised
+                  description: Unathorised
 
   /cart/{cartId}/item/{itemId}:
     put:
@@ -278,16 +278,16 @@ paths:
                   error: Unprocessable entity
                   description: Unprocessable entity
 
-        '403':
-          description: Forbidden
+        '401':
+          description: Unathorised
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                  status: 403
-                  error: Forbidden
-                  description: Forbidden
+                  status: 401
+                  error: Unathorised
+                  description: Unathorised
     delete:
       description: Removes the item from the cart.
       security:
@@ -329,16 +329,16 @@ paths:
                   error: Not found
                   description: Not found
 
-        '403':
-          description: Forbidden
+        '401':
+          description: Unathorised
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                  status: 403
-                  error: Forbidden
-                  description: Forbidden
+                  status: 401
+                  error: Unathorised
+                  description: Unathorised
 
 components:
   securitySchemes:
@@ -351,7 +351,7 @@ components:
       description: Standard error message.
       type: object
       required:
-        - code
+        - status
         - error
         - description
       properties:
