@@ -21,6 +21,8 @@ func ErrorNotFound(w http.ResponseWriter, description string) {
 	if description != "" {
 		err.Description = description
 	}
+
+	w.WriteHeader(404)
 	json.NewEncoder(w).Encode(err)
 }
 
@@ -36,6 +38,7 @@ func ErrorUnauthorised(w http.ResponseWriter, description string) {
 		err.Description = description
 	}
 
+	w.WriteHeader(401)
 	json.NewEncoder(w).Encode(err)
 }
 
@@ -51,5 +54,23 @@ func ErrorUnprocessable(w http.ResponseWriter, description string) {
 		err.Description = description
 	}
 
+	w.WriteHeader(422)
+	json.NewEncoder(w).Encode(err)
+}
+
+// ErrorBadRequest REturns a Bad Request error.
+func ErrorBadRequest(w http.ResponseWriter, description string) {
+
+	err := &errorResponse{
+		Status:      400,
+		Error:       "Bad Request",
+		Description: "Bad Request",
+	}
+
+	if description != "" {
+		err.Description = description
+	}
+
+	w.WriteHeader(400)
 	json.NewEncoder(w).Encode(err)
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -9,10 +10,44 @@ import (
 	"time"
 
 	"github.com/threkk/cart-service/internal/cart"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func main() {
+	// p := flag.String("database", "", "Path to the SQLite database.")
+	// flag.Parse()
+
+	// if *p == "" {
+	// 	fmt.Println("No database provided.")
+	// 	os.Exit(1)
+	// }
+
+	// wd, err := os.Getwd()
+	// if err != nil {
+	// 	fmt.Println("error: " + err.Error())
+	// 	os.Exit(1)
+	// }
+
+	// loc, err := filepath.Abs(path.Join(wd, *p))
+	// if err != nil {
+	// 	fmt.Println("error: " + err.Error())
+	// 	os.Exit(1)
+	// }
+
 	svc := cart.NewService()
+	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{})
+
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+
+	db.AutoMigrate(&cart.Cart{})
+	db.AutoMigrate(&cart.Item{})
+
+	svc.DB = db
+
 	srv := &http.Server{
 		Handler:        svc,
 		Addr:           ":3000",
@@ -41,5 +76,5 @@ func main() {
 
 	<-ctx.Done()
 
-	os.Exit(1)
+	os.Exit(0)
 }
